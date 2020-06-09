@@ -1,0 +1,14 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+.DS_Store
+cluster/.vagrant/
+cluster/resources/hadoop-2.7.3.tar.gz
+cluster/resources/spark-2.1.0-bin-hadoop2.7.tar.gz
+src/

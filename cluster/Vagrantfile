@@ -1,0 +1,69 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
+
+Vagrant.configure("2") do |config|
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "1024"
+  end
+  config.vm.define :slave2 do |slave2|
+    slave2.vm.box = "centos/7"
+    slave2.vm.host_name = 'slave2.local'
+    slave2.vm.network :private_network, ip: "192.168.100.103"
+    slave2.vm.provision "shell", path: "scripts/common.sh"
+    slave2.vm.provision "shell", path: "scripts/ssh-config.sh"
+    slave2.vm.provision "shell", path: "scripts/setup-java.sh"
+    slave2.vm.provision "shell", path: "scripts/setup-hadoop.sh"
+    slave2.vm.provision "shell", path: "scripts/setup-hadoop-slaves.sh"
+    slave2.vm.provision "shell", path: "scripts/setup-spark.sh"
+    slave2.vm.provision "shell", path: "scripts/setup-spark-slaves.sh"
+  end
+
+  config.vm.define :slave1 do |slave1|
+    slave1.vm.box = "centos/7"
+    slave1.vm.host_name = 'slave1.local'
+    slave1.vm.network :private_network, ip: "192.168.100.102"
+    slave1.vm.provision "shell", path: "scripts/common.sh"
+    slave1.vm.provision "shell", path: "scripts/ssh-config.sh"
+    slave1.vm.provision "shell", path: "scripts/setup-java.sh"
+    slave1.vm.provision "shell", path: "scripts/setup-hadoop.sh"
+    slave1.vm.provision "shell", path: "scripts/setup-hadoop-slaves.sh"
+    slave1.vm.provision "shell", path: "scripts/setup-spark.sh"
+    slave1.vm.provision "shell", path: "scripts/setup-spark-slaves.sh"
+  end
+
+  config.vm.define :body do |body|
+    body.vm.box = "centos/7"
+    body.vm.host_name = 'body.local'
+    body.vm.network :private_network, ip: "192.168.100.101"
+    body.vm.network "forwarded_port", guest: 8088, host: 18088
+    body.vm.network "forwarded_port", guest: 19888, host: 19888
+    body.vm.provision "shell", path: "scripts/common.sh"
+    body.vm.provision "shell", path: "scripts/body-ssh.sh"
+    body.vm.provision "shell", path: "scripts/setup-java.sh"
+    body.vm.provision "shell", path: "scripts/setup-hadoop.sh"
+    body.vm.provision "shell", path: "scripts/setup-hadoop-slaves.sh"
+    body.vm.provision "shell", path: "scripts/setup-spark.sh"
+    body.vm.provision "shell", path: "scripts/setup-spark-slaves.sh"
+  end
+
+  config.vm.define :head do |head|
+    head.vm.box = "centos/7"
+    head.vm.host_name = 'head.local'
+    head.vm.network :private_network, ip: "192.168.100.100"
+    head.vm.network "forwarded_port", guest: 8080, host: 8080
+    head.vm.network "forwarded_port", guest: 50070, host: 50070
+    head.vm.provision "shell", path: "scripts/common.sh"
+    head.vm.provision "shell", path: "scripts/head-ssh.sh"
+    head.vm.provision "shell", path: "scripts/setup-java.sh"
+    head.vm.provision "shell", path: "scripts/setup-hadoop.sh"
+    head.vm.provision "shell", path: "scripts/setup-hadoop-slaves.sh"
+    head.vm.provision "shell", path: "scripts/setup-spark.sh"
+    head.vm.provision "shell", path: "scripts/setup-spark-slaves.sh"
+  end
+end
