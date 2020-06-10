@@ -20,6 +20,18 @@ function setupHostFile {
 	rm -f /etc/nhosts
 }
 
+function updateYumRepo {
+    echo "********** begin updating yum repo **********"
+    mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+    mv /vagrant/resources/CentOS7-Base-163.repo /etc/yum.repos.d/CentOS-Base.repo
+    yum clean all
+    yum makecache
+#    yum -y update # 升级所有包同时也升级软件和系统内核
+#    yum -y upgrade # 只升级所有包，不升级软件和系统内核
+    echo "********** updating yum repo finished **********"
+}
+
+updateYumRepo
 yum -y update
 yum -y install epel-release
 yum -y install kernel-devel gcc make
