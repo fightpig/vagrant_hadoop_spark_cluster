@@ -36,6 +36,7 @@ function setupHadoop {
 function setupEnvVars {
 	echo "creating hadoop environment variables"
 	cp -f ${HADOOP_RES_DIR}/hadoop.sh /etc/profile.d/hadoop.sh
+	echo "export HADOOP_PREFIX=/${HADOOP_PREFIX}" >> /root/.bashrc
 }
 
 function installHadoop {
